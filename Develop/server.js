@@ -42,22 +42,6 @@ app.post('/api/notes', (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  
-  // fs.readFile('./db/db.json', 'utf8', (err, data) => {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     const noteData = JSON.parse(data);
-  //     noteData.push(addNote);
-  //     fs.writeFile('./db/db.json', JSON.stringify(noteData, null), (err) => {
-  //       if (err) {
-  //         console.log(err);
-  //       } else {
-  //         res.json(addNote);
-  //       }
-  //     });
-  //   }
-  // })
 })
 
 app.listen(PORT, () =>
