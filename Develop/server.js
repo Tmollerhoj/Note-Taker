@@ -20,7 +20,7 @@ app.get('/notes', (req, res) =>
 );
 
 app.get('/api/notes', (req, res) => {
-  fs.readFile('./db/db.json', (err, data) => {
+  fs.readFile('./db/db.json', 'utf8', (err, data) => {
     if (err) {
       console.log(err);
     } else {
@@ -31,23 +31,33 @@ app.get('/api/notes', (req, res) => {
 })
 
 app.post('/api/notes', (req, res) => {
-  let addNote = req.body;
-  addNote.id =uuid.v4;
-  fs.readFile('./db/db.json', 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const noteData = JSON.parse(data);
-      noteData.push(addNote);
-      fs.writeFile('./db/db.json', JSON.stringify(noteData, null), (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.json(addNote);
-        }
-      });
-    }
-  })
+  try {
+    let addNote = req.body;
+    addNote.id =uuid.v4;
+    const noteData = fs.readFileSync('./db/db.json', 'utf8');
+    const notes = JSON.parse(noteData);
+    notes.push(addNote);
+    fs.writeFileSync('./db/db.json', JSON.stringify(noteData, null));
+    res.json(addNote);
+  } catch (err) {
+    console.log(err);
+  }
+  
+  // fs.readFile('./db/db.json', 'utf8', (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     const noteData = JSON.parse(data);
+  //     noteData.push(addNote);
+  //     fs.writeFile('./db/db.json', JSON.stringify(noteData, null), (err) => {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         res.json(addNote);
+  //       }
+  //     });
+  //   }
+  // })
 })
 
 app.listen(PORT, () =>
